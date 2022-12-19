@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { shorten,urlId,openShort,deleteId } from "..//controllers/urls.controllers.js";
+import { shorten,urlId,openShort,deleteId } from "../controllers/urls.controllers.js";
+import {validSchemaRegister} from "../middlewares/shorten.middleware.js"
 
 const router = Router();
 
-router.post("/urls/shorten", shorten)
+router.post("/urls/shorten", validSchemaRegister, shorten)
 
 router.get("/urls/:id", urlId)
 
