@@ -1,5 +1,5 @@
-import { registerSchema } from "../models/registerSchema.js"
-import { connectionDB } from "../database/db.js"
+import registerSchema from "../models/registerSchema.js"
+import  connectionDB from "../database/db.js"
 
 export async function validSchemaRegister(req, res, next){
     const user = req.body
@@ -7,7 +7,7 @@ export async function validSchemaRegister(req, res, next){
     const { error } = registerSchema.validate(user, {abortEarly: false});
 
     if(error){
-        const errors = error.details.map((detail) => detail.mensage);
+        const errors = error.details.map((detail) => detail.message);
         return res.status(422).send({ errors })
 
     }
@@ -17,7 +17,7 @@ export async function validSchemaRegister(req, res, next){
         [user.email]
     );
 
-    if(emailExist){
+    if(emailExist.rowCount !== 0){
         return res.sendStatus(409);
     }
 

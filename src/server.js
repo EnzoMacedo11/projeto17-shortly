@@ -2,6 +2,7 @@ import express  from "express";
 import cors from "cors";
 import dotenv from "dotenv"
 import registerRouters from "./routers/registerRouters.js"
+import urlsRouters from "./routers/urlsRouters.js"
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(registerRouters)
+app.use(urlsRouters)
 
 
 const port = process.env.PORT || 4000

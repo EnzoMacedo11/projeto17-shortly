@@ -6,6 +6,6 @@ const router = Router();
 
 router.post("/signup", validSchemaRegister, signUp)
 
-router.post("signin", signIn)
+router.post("/signin", signIn)
 
 export default router;
