@@ -1,6 +1,6 @@
 import shortenSchema from "../models/shortenSchema.js"
 
-export async function validSchemaRegister(req, res, next){
+export async function validSchemaShorten(req, res, next){
     const url = req.body
 
     const { error } = shortenSchema.validate(url, {abortEarly: false});
