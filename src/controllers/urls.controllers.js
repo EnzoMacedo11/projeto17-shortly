@@ -14,7 +14,19 @@ export async function shorten(req, res){
     }
 }
 
-export async function urlId(req, res){}
+export async function urlId(req, res){
+    const {id} = req.params;
+    try{
+        const url = await connectionDB.query("SELECT * FROM urls WHERE id=$1",[id]);
+        if(url.rowCount === 0){
+            return res.status(404).send("Url não encontrado!")
+        }
+        const data = url.rows
+        res.status(200).send({data})
+    }catch(err){
+        res.status(500).send(err.message)
+    }
+}
 
 export async function openShort(req, res){}
 
