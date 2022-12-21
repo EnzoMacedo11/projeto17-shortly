@@ -50,20 +50,27 @@ export async function openShort(req, res) {
       "SELECT * FROM urls WHERE shorturl=$1",
       [String(shortUrl)]
     );
-    console.log("linha 42",short.rowCount != 0);
-    if (short.rowCount != 0) {
+    const shortrows = short.rows[0]
+    const userid = shortrows.userid
+    if(shortUrl.length === 8){
+      if (short.rowCount === 0) {
+        return res.status(404).send("ShortUrl não encontrado!")
+      }
       await connectionDB.query(
         "UPDATE urls SET cv = cv + 1 WHERE shorturl=$1",
         [shortUrl]
       );
+      await connectionDB.query(
+        "UPDATE users SET ctv = ctv + 1 WHERE id=$1",[userid]
+      )
       const Aurl = short.rows;
       const url = Aurl[0].url;
       //console.log("short.rowCount",short.rowCount)
-      //console.log("12",short)
+      console.log("12",short.rows)
+      console.log("userid", userid)
       //console.log("url",url)
      return res.redirect(url);
     }
-    return res.status(404).send("ShortUrl não encontrado!");
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -82,8 +89,10 @@ export async function deleteId(req, res) {
         return res.status(404)
       }
     const userId = session.rows[0].userid;
+    console.log(userId)
     const url = await connectionDB.query("SELECT * FROM urls WHERE id=$1",[id])
     const urlId = url.rows[0].userid;
+    console.log(urlId)
     if(urlId === userId){
         await connectionDB.query("DELETE * FROM urls WHERE id=$1",[id])
         return res.status(204)
