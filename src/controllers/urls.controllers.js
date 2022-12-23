@@ -84,7 +84,6 @@ export async function openShort(req, res) {
 export async function deleteId(req, res) {
   const { id } = req.params;
   const { authorization } = req.headers;
-
   try{
     const session = await connectionDB.query(
         "SELECT * FROM sessions WHERE token=$1",
@@ -95,18 +94,9 @@ export async function deleteId(req, res) {
     const user = await connectionDB.query(
       "SELECT * FROM users WHERE id=$1",[userId]
     )
-    await connectionDB.query(
-      `UPDATE users SET "linksCount" = "linksCount" - 1 WHERE id=$1`,[userId]
-    )
-    console.log("user", user.rows[0].visitCount)
-      const visitCountUser = user.rows[0].visitCount;
-        
-
-    //console.log("userid",userId)
     const url = await connectionDB.query("SELECT * FROM urls WHERE id=$1",[id])
-    const viewsUrl = url.rows[0].visitCount
-    console.log("viewsUrl",viewsUrl)
-    //console.log("1",url.rowCount)
+    console.log(url.rowCount)
+    
     if(url.rowCount === 0){
       return res.status(404).send()
     }
@@ -114,8 +104,12 @@ export async function deleteId(req, res) {
     //console.log("urlId",urlId)
     //console.log("url",url)
      if(urlId === userId){
+        const viewsUrl = url.rows[0].visitCount
          await connectionDB.query(`UPDATE users SET "visitCount" = "visitCount" - ${viewsUrl} WHERE id=$1`,[userId] )
          await connectionDB.query("DELETE FROM urls WHERE id=$1",[id])
+         await connectionDB.query(
+          `UPDATE users SET "linksCount" = "linksCount" - 1 WHERE id=$1`,[userId]
+        )
          return res.status(204).send()
     }  
      else{

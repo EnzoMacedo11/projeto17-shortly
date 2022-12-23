@@ -23,20 +23,21 @@ export async function signIn(req, res){
     const {email, password} = req.body
     try{
         const registeredUser = await connectionDB.query("SELECT * FROM users WHERE email=$1",[email]);
-        if(!registeredUser){
+        if(registeredUser.rowCount===0){
             return res.status(401).send("Usuário/Senha Inválidos!")
         }
         const { rows } = registeredUser
         //console.log(registeredUser)
-        console.log("teste1",registeredUser.rows)
-        console.log("teste senha",rows[0].password)
-        console.log("testeid",rows[0].id)
+        //console.log("teste1",registeredUser.rows)
+        //console.log("teste senha",rows[0].password)
+        //console.log("testeid",rows[0].id)
         const userid = rows[0].id
         
         const returnPassword = bcrypt.compareSync(
             password,
             rows[0].password
         );
+        console.log(returnPassword)
         //console.log("teste senha!",returnPassword)
         //console.log("teste senha body", password)
         if(!returnPassword){
