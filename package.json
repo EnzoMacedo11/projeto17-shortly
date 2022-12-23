@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "start": "node ./src/index.js",
+		"dev": "npx nodemon ./src/index.js"
   },
   "keywords": [],
   "author": "",
